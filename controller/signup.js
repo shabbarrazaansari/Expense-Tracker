@@ -45,7 +45,7 @@ exports .loginExist = async (req,res,next)=>{
     }
     await user.findAll({where:{email}})
     .then(user=>{
-        console.log(user)
+        // console.log(user)
        bcrypt.compare(password,user[0].password,(err,result)=>{
         if(err){
             throw new Error();
