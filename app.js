@@ -12,6 +12,8 @@ const user = require('./models/user')
 const expense = require('./models/expense')
 app.use(bodyParser.json({extended :true}))
 app.use(cors());
+user.hasMany(expense)
+expense.belongsTo(user)
 
 app.use(adminRoutes);
 
