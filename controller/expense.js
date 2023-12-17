@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 const expense = require('../models/expense');
 
 exports .addExpense = async(req,res,next)=>{
-    console.log(req.body);
+    // console.log(req.body);
     const {amount,description,category} = req.body;
     
     if(amount == undefined || amount.length == 0){
@@ -44,7 +44,7 @@ exports .getExpense = async (req,res,next)=>{
     try {
         //  console.log("me id",req.user)
         const details = await expense.findAll({where:{userId:req.user.id}});
-        console.log(details);
+        // console.log(details);
         res.status(200).json(details)
     } catch (error) {
         console.log(error)

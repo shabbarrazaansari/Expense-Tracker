@@ -39,7 +39,7 @@ exports .signup = async(req,res,next)=>{
 }
 
 exports .loginExist = async (req,res,next)=>{
-    console.log(req.body);
+    // console.log(req.body);
     const {email,password} = req.body;
     if(ifStringValid(email) || ifStringValid(password)){
         return res.status(400).json({success:false,message:"email or password is missing"})
