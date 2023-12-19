@@ -3,6 +3,7 @@ const Order = require('../models/orders');
 const { where } = require('sequelize');
 // const { json } = require('body-parser');
 // console.log("key id",process.env.RAZORPAY_KEY_ID);
+const userController = require('./signup')
 
 exports.purchasePremium = async (req, res) => {
 
@@ -15,7 +16,7 @@ exports.purchasePremium = async (req, res) => {
         
 
         const amount = 2500;
-       await rzp.orders.create({ amount, currency: "INR" },async (err, order) => {
+        await rzp.orders.create({ amount, currency: "INR" },async (err, order) => {
             if (err) {
                 throw new Error(JSON.stringify(err));
             }
@@ -34,21 +35,27 @@ exports.purchasePremium = async (req, res) => {
 
 exports .updateTransaction = async (req,res)=>{
     try {
+        const userId = req.user.id;
         const {payment_id,order_id} = req.body;
-        Order.findOne({where:{orderid:order_id}}).then(order=>{
-            order.update({paymentid:payment_id,status:"SUCCESFUL"}).then(()=>{
-                req.user.update({ispremiumuser:true}).then(()=>{
-                    return res.status(202).json({success:true,message:"transction Successful"});
-                }).catch((err)=>{
-                    throw new Error(err);
-                })
-            }).catch((err)=>{
-                throw new Error(err);
-            })
+        const order = await Order.findOne({where:{orderid:order_id}})
+        const promise1 = order.update({paymentid:payment_id,status:"SUCCESFUL"})
+        const promise2 = req.user.update({ispremiumuser:true})
+
+        Promise.all([promise1,promise2]).then(()=>{
+
+            return res.status(202).json({success:true,message:"transction Successful",token:generateWebToken(userId,true)});
         })
+        .catch((err)=>{
+            throw new Error(err)
+        })
+                   
+               
     } catch (error) {
         throw new Error(err);
     }
+}
+function generateWebToken(id,ispremiumuser) {
+    return jwt.sign({userId:id,ispremiumuser},'8090501210')
 }
 // module.exports = purchasePremium;
     

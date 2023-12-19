@@ -51,7 +51,7 @@ exports .loginExist = async (req,res,next)=>{
         if(err){
             throw new Error();
         } if(result === true) {
-            return res.status(200).json({success:true,message:"user login successfully",token:generateWebToken(user[0].id)})
+            return res.status(200).json({success:true,message:"user login successfully",token:generateWebToken(user[0].id,user[0].ispremiumuser)})
         }
         else {
             return res.status(400).json({success:false,message:'password is incorrect'})
@@ -64,9 +64,10 @@ exports .loginExist = async (req,res,next)=>{
     })
     
 }
-function generateWebToken(id) {
-    return jwt.sign({userId:id},'8090501210')
+function generateWebToken(id,ispremiumuser){
+    return jwt.sign({userId:id,ispremiumuser},'8090501210')
 }
 exports.hello = (req,res,next)=>{
     res.send('hello ia server')
 }
+// module.exports = generateWebToken;
