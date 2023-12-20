@@ -5,6 +5,6 @@ const controller = require('../controller/premiumfeatures')
 
 const router = express.Router();
 
-router.get('/premium/showleaderboard',userAuthentication.authenticate,controller.getLeaderboad);
+router.get('/premium/showleaderboard',userAuthentication.authenticate,controller.getLeaderboard);
 
 module.exports = router;
