@@ -16,6 +16,7 @@ const app = express();
 
 const adminRoutes = require('./routes/adminroutes')
 const purchase = require("./routes/purchase")
+const premiumfeatures = require('./routes/premiumFeatures');
 
 const user = require('./models/user')
 const expense = require('./models/expense')
@@ -30,7 +31,8 @@ user.hasMany(Order);
 Order.belongsTo(user); 
 
 app.use(adminRoutes);
-app.use(purchase)
+app.use(purchase);
+app.use(premiumfeatures)
 
 
 sequelize.
