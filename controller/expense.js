@@ -1,5 +1,6 @@
 const express = require('express')
 const Sequelize = require('sequelize');
+const User = require('../models/user');
 
 const expense = require('../models/expense');
 
@@ -13,6 +14,16 @@ exports .addExpense = async(req,res,next)=>{
         
     try {
         const data = await expense.create({amount:amount,description:description,category:category,userId:req.user.id});
+        const totalExpense = Number(req.user.totalExpenses) + Number(amount);
+        console.log(totalExpense);
+        await User.update({
+            totalExpenses:totalExpense,
+            
+        },
+        {
+            where:{id:req.user.id}
+        });
+
         res.status(201).json(data)
         // console.log(data)
         // console.log("expense created")
