@@ -1,6 +1,6 @@
 const Razorpay = require('razorpay');
 const Order = require('../models/orders');
-const { where } = require('sequelize');
+// const { where } = require('sequelize');
 // const { json } = require('body-parser');
 // console.log("key id",process.env.RAZORPAY_KEY_ID);
 const userController = require('./signup')

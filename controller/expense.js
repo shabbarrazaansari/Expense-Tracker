@@ -1,11 +1,13 @@
 const express = require('express')
 const Sequelize = require('sequelize');
 const User = require('../models/user');
+const sequelize = require('../util/database');
 
 const expense = require('../models/expense');
 
 exports .addExpense = async(req,res,next)=>{
     // console.log(req.body);
+    const t = await sequelize.transaction();
     const {amount,description,category} = req.body;
     
     if(amount == undefined || amount.length == 0){
@@ -13,7 +15,7 @@ exports .addExpense = async(req,res,next)=>{
     }
         
     try {
-        const data = await expense.create({amount:amount,description:description,category:category,userId:req.user.id});
+        const data = await expense.create({amount:amount,description:description,category:category,userId:req.user.id},{transaction:t});
         const totalExpense = Number(req.user.totalExpenses) + Number(amount);
         console.log(totalExpense);
         await User.update({
@@ -21,13 +23,16 @@ exports .addExpense = async(req,res,next)=>{
             
         },
         {
-            where:{id:req.user.id}
+            where:{id:req.user.id},
+            transaction:t
         });
+        await t.commit();
 
         res.status(201).json(data)
         // console.log(data)
         // console.log("expense created")
     } catch (error) {
+        await t.rollback();
         console.log(error)
     }    
 
