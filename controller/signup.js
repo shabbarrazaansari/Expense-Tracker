@@ -71,3 +71,4 @@ exports.hello = (req,res,next)=>{
     res.send('hello ia server')
 }
 // module.exports = generateWebToken;
+

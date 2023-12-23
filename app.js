@@ -17,10 +17,14 @@ const app = express();
 const adminRoutes = require('./routes/adminroutes')
 const purchase = require("./routes/purchase")
 const premiumfeatures = require('./routes/premiumFeatures');
+const resetPasswordRoutes = require('./routes/resetpassword')
+
 
 const user = require('./models/user')
 const expense = require('./models/expense')
 const Order = require('./models/orders');
+const Forgotpassword = require('./models/forgotpassword');
+
 app.use(bodyParser.json({extended :true}))
 app.use(cors());
 
@@ -29,10 +33,13 @@ expense.belongsTo(user)
 
 user.hasMany(Order);
 Order.belongsTo(user); 
+user.hasMany(Forgotpassword);
+Forgotpassword.belongsTo(user);
 
 app.use(adminRoutes);
 app.use(purchase);
-app.use(premiumfeatures)
+app.use(premiumfeatures);
+app.use(resetPasswordRoutes);
 
 
 sequelize.

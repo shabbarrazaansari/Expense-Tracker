@@ -37,24 +37,46 @@ exports .addExpense = async(req,res,next)=>{
     }    
 
 }
-exports.deleteExpense = async (req,res,next)=>{
-//    console.log("hello params",req.params)
-    const deletId = req.params.id;
+exports.deleteExpense = async (req, res, next) => {
+    const deleteId = req.params.id;
+    const t = await sequelize.transaction();
+
     try {
-        await expense.destroy({where :{id:deletId,userId:req.user.id}}).then(noofrows=>{
-            if(noofrows===0){
-                return res.status(404).json({success:false,message:'expense belongs to other user'})
-            }
-            else {
-                return res.status(200).json({success:true,message:"delete successfully"})
-            }
-            
-        })
-       
+        const deletedExpense = await expense.findOne({
+            where: { id: deleteId, userId: req.user.id },
+            transaction: t,
+        });
+
+        if (!deletedExpense) {
+            await t.rollback();
+            return res.status(404).json({ success: false, message: 'Expense not found' });
+        }
+
+        const deletedAmount = deletedExpense.amount;
+
+        await expense.destroy({
+            where: { id: deleteId, userId: req.user.id },
+            transaction: t,
+        });
+
+        const updatedTotalExpenses = Number(req.user.totalExpenses) - Number(deletedAmount);
+
+        await User.update(
+            { totalExpenses: updatedTotalExpenses },
+            { where: { id: req.user.id }, transaction: t }
+        );
+
+        await t.commit();
+
+        return res.status(200).json({ success: true, message: 'Expense deleted successfully' });
+
     } catch (error) {
-     console.log(error) ;  
+        await t.rollback();
+        console.log(error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
     }
-}
+};
+
 
 exports .getExpense = async (req,res,next)=>{
     try {
