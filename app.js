@@ -24,6 +24,7 @@ const user = require('./models/user')
 const expense = require('./models/expense')
 const Order = require('./models/orders');
 const Forgotpassword = require('./models/forgotpassword');
+const incomes = require('./models/income');
 
 app.use(bodyParser.json({extended :true}))
 app.use(cors());
@@ -35,6 +36,11 @@ user.hasMany(Order);
 Order.belongsTo(user); 
 user.hasMany(Forgotpassword);
 Forgotpassword.belongsTo(user);
+user.hasMany(incomes);
+incomes.belongsTo(user); 
+// added new
+expense.hasMany(incomes);
+incomes.belongsTo(expense);
 
 app.use(adminRoutes);
 app.use(purchase);

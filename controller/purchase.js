@@ -1,9 +1,11 @@
 const Razorpay = require('razorpay');
 const Order = require('../models/orders');
+const jwt = require('jsonwebtoken')
 // const { where } = require('sequelize');
 // const { json } = require('body-parser');
 // console.log("key id",process.env.RAZORPAY_KEY_ID);
 const userController = require('./signup')
+
 
 exports.purchasePremium = async (req, res) => {
 
@@ -55,7 +57,7 @@ exports .updateTransaction = async (req,res)=>{
     }
 }
 function generateWebToken(id,ispremiumuser) {
-    return jwt.sign({userId:id,ispremiumuser},'8090501210')
+    return jwt.sign({userId:id,ispremiumuser:ispremiumuser},'8090501210')
 }
 // module.exports = purchasePremium;
     

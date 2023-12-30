@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/updatepassword/:resetpasswordid', resetpasswordController.postUpdatePassword)
 
-router.post('/resetpassword/:id', resetpasswordController.resetpassword)
+router.get('/resetpassword/:id', resetpasswordController.resetpassword)
 
 router.post('/forgotpassword', resetpasswordController.forgotpassword)
 
