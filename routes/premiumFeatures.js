@@ -8,5 +8,6 @@ const router = express.Router();
 
 router.get('/premium/showleaderboard',userAuthentication.authenticate,controller.getLeaderboard);
 router.get('/download',userAuthentication.authenticate,download.getDowndload);
+router.get('/premium/expense',userAuthentication.authenticate,download.premiumGetExpense)
 
 module.exports = router;

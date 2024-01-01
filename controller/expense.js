@@ -178,3 +178,31 @@ exports.getDowndload = async (req,res,next) =>{
             
 
 };
+exports.premiumGetExpense = async (req, res, next) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+        const offset = (page - 1) * limit;
+
+        const details = await expense.findAll({
+            where: { userId: req.user.id },
+            include: incomes,
+            limit,
+            offset,
+        });
+
+        const totalExpenses = await expense.count({ where: { userId: req.user.id } });
+
+        const totalPages = Math.ceil(totalExpenses / limit);
+
+        res.status(200).json({
+            totalExpenses,
+            currentPage: page,
+            totalPages,
+            expenses: details,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
