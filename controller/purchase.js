@@ -57,7 +57,7 @@ exports .updateTransaction = async (req,res)=>{
     }
 }
 function generateWebToken(id,ispremiumuser) {
-    return jwt.sign({userId:id,ispremiumuser:ispremiumuser},'8090501210')
+    return jwt.sign({userId:id,ispremiumuser:ispremiumuser},process.env.TOKEN_SECRET)
 }
 // module.exports = purchasePremium;
     

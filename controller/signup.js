@@ -65,7 +65,7 @@ exports .loginExist = async (req,res,next)=>{
     
 }
 function generateWebToken(id,ispremiumuser){
-    return jwt.sign({userId:id,ispremiumuser},'8090501210')
+    return jwt.sign({userId:id,ispremiumuser},process.env.TOKEN_SECRET)
 }
 exports.hello = (req,res,next)=>{
     res.send('hello ia server')

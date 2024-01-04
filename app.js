@@ -1,5 +1,6 @@
 const express = require('express');
 // const Sequelize = require('sequelize')
+const helmet = require("helmet")
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -10,7 +11,7 @@ const bodyParser = require('body-parser')
 
 const cors = require("cors")
 const app = express();
-const port = process.env.PORT || 1000;
+const port = 1000;
 //  const port= 1000;
 // dotenv.config();
 
